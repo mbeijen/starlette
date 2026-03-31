@@ -460,8 +460,8 @@ wheels = [
 ]
 
 [[package]]
-name = "httpx"
-version = "0.28.1"
+name = "httpxyz"
+version = "0.30.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -469,9 +469,9 @@ dependencies = [
     { name = "httpcore" },
     { name = "idna" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz", hash = "sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc", size = 141406, upload-time = "2024-12-06T15:37:23.222Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/84/3fd3013275ca39e9b5468d94860e1018da6969678f8aacb8889af7101983/httpxyz-0.30.0.tar.gz", hash = "sha256:e1428daf3d3971a0e3dd66e09badc76549d6b4754aad06a999ba72fbbf4b3ff6", size = 146159, upload-time = "2026-03-31T06:44:43.507Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl", hash = "sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad", size = 73517, upload-time = "2024-12-06T15:37:21.509Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/8f/d2d87f54348075ccf962d8729bc52ed961da0e3332fb28d5316f42095b52/httpxyz-0.30.0-py3-none-any.whl", hash = "sha256:4251f35fc1049acde8b36d46a141241b0ff38f685042f2ee0b32225a4d9a0fae", size = 75937, upload-time = "2026-03-31T06:44:41.661Z" },
 ]
 
 [[package]]
@@ -1251,7 +1251,7 @@ dependencies = [
 
 [package.optional-dependencies]
 full = [
-    { name = "httpx" },
+    { name = "httpxyz" },
     { name = "itsdangerous" },
     { name = "jinja2" },
     { name = "python-multipart" },
@@ -1280,7 +1280,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "anyio", specifier = ">=3.6.2,<5" },
-    { name = "httpx", marker = "extra == 'full'", specifier = ">=0.27.0,<0.29.0" },
+    { name = "httpxyz", marker = "extra == 'full'", specifier = ">=0.30.0" },
     { name = "itsdangerous", marker = "extra == 'full'" },
     { name = "jinja2", marker = "extra == 'full'" },
     { name = "python-multipart", marker = "extra == 'full'", specifier = ">=0.0.18" },

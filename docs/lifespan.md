@@ -41,7 +41,7 @@ can be used to share the objects between the lifespan, and the requests.
 import contextlib
 from typing import AsyncIterator, TypedDict
 
-import httpx
+import httpxyz
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse
@@ -49,12 +49,12 @@ from starlette.routing import Route
 
 
 class State(TypedDict):
-    http_client: httpx.AsyncClient
+    http_client: httpxyz.AsyncClient
 
 
 @contextlib.asynccontextmanager
 async def lifespan(app: Starlette) -> AsyncIterator[State]:
-    async with httpx.AsyncClient() as client:
+    async with httpxyz.AsyncClient() as client:
         yield {"http_client": client}
 
 
@@ -86,7 +86,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import TypedDict
 
-import httpx
+import httpxyz
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse
@@ -94,19 +94,19 @@ from starlette.routing import Route
 
 
 class State(TypedDict):
-    http_client: httpx.AsyncClient
+    http_client: httpxyz.AsyncClient
 
 
 @asynccontextmanager
 async def lifespan(app: Starlette) -> AsyncIterator[State]:
-    async with httpx.AsyncClient() as client:
+    async with httpxyz.AsyncClient() as client:
         yield {"http_client": client}
 
 
 async def homepage(request: Request[State]) -> PlainTextResponse:
     client = request.state["http_client"]
 
-    reveal_type(client)  # Revealed type is 'httpx.AsyncClient'
+    reveal_type(client)  # Revealed type is 'httpxyz.AsyncClient'
 
     response = await client.get("https://www.example.com")
     return PlainTextResponse(response.text)

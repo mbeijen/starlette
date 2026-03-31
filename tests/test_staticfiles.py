@@ -174,7 +174,7 @@ def test_staticfiles_prevents_breaking_out_of_directory(tmpdir: Path) -> None:
         file.write("outside root dir")
 
     app = StaticFiles(directory=directory)
-    # We can't test this with 'httpx', so we test the app directly here.
+    # We can't test this with 'httpxyz', so we test the app directly here.
     path = app.get_path({"path": "/../example.txt"})
     scope = {"method": "GET"}
 
@@ -559,7 +559,7 @@ def test_staticfiles_disallows_path_traversal_with_symlinks(tmpdir: Path) -> Non
     os.symlink(source_path, statics_path)
 
     app = StaticFiles(directory=statics_path, follow_symlink=True)
-    # We can't test this with 'httpx', so we test the app directly here.
+    # We can't test this with 'httpxyz', so we test the app directly here.
     path = app.get_path({"path": "/../index.html"})
     scope = {"method": "GET"}
 
@@ -587,7 +587,7 @@ def test_staticfiles_avoids_path_traversal(tmp_path: Path) -> None:
 
     app = StaticFiles(directory=statics_path)
 
-    # We can't test this with 'httpx', so we test the app directly here.
+    # We can't test this with 'httpxyz', so we test the app directly here.
     path = app.get_path({"path": "/../static1.txt"})
     with pytest.raises(HTTPException) as exc_info:
         anyio.run(app.get_response, path, {"method": "GET"})

@@ -35,12 +35,12 @@ else:  # pragma: no cover
     from typing_extensions import Self
 
 try:
-    import httpx
+    import httpxyz
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
-        "The starlette.testclient module requires the httpx package to be installed.\n"
+        "The starlette.testclient module requires the httpxyz package to be installed.\n"
         "You can install this with:\n"
-        "    $ pip install httpx\n"
+        "    $ pip install httpxyz\n"
     )
 _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
 
@@ -82,7 +82,7 @@ class _Upgrade(Exception):
 
 
 class WebSocketDenialResponse(  # type: ignore[misc]
-    httpx.Response,
+    httpxyz.Response,
     WebSocketDisconnect,
 ):
     """
@@ -196,7 +196,7 @@ class WebSocketTestSession:
         return json.loads(text)
 
 
-class _TestClientTransport(httpx.BaseTransport):
+class _TestClientTransport(httpxyz.BaseTransport):
     def __init__(
         self,
         app: ASGI3App,
@@ -214,7 +214,7 @@ class _TestClientTransport(httpx.BaseTransport):
         self.app_state = app_state
         self.client = client
 
-    def handle_request(self, request: httpx.Request) -> httpx.Response:
+    def handle_request(self, request: httpxyz.Request) -> httpxyz.Response:
         scheme = request.url.scheme
         netloc = request.url.netloc.decode(encoding="ascii")
         path = request.url.path
@@ -356,16 +356,16 @@ class _TestClientTransport(httpx.BaseTransport):
                 "stream": io.BytesIO(),
             }
 
-        raw_kwargs["stream"] = httpx.ByteStream(raw_kwargs["stream"].read())
+        raw_kwargs["stream"] = httpxyz.ByteStream(raw_kwargs["stream"].read())
 
-        response = httpx.Response(**raw_kwargs, request=request)
+        response = httpxyz.Response(**raw_kwargs, request=request)
         if template is not None:
             response.template = template  # type: ignore[attr-defined]
             response.context = context  # type: ignore[attr-defined]
         return response
 
 
-class TestClient(httpx.Client):
+class TestClient(httpxyz.Client):
     __test__ = False
     task: Future[None]
     portal: anyio.abc.BlockingPortal | None = None
@@ -378,7 +378,7 @@ class TestClient(httpx.Client):
         root_path: str = "",
         backend: Literal["asyncio", "trio"] = "asyncio",
         backend_options: dict[str, Any] | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
         headers: dict[str, str] | None = None,
         follow_redirects: bool = True,
         client: tuple[str, int] = ("testclient", 50000),
@@ -421,21 +421,21 @@ class TestClient(httpx.Client):
     def request(  # type: ignore[override]
         self,
         method: str,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        content: httpx._types.RequestContent | None = None,
+        content: httpxyz._types.RequestContent | None = None,
         data: _RequestData | None = None,
-        files: httpx._types.RequestFiles | None = None,
+        files: httpxyz._types.RequestFiles | None = None,
         json: Any = None,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
-        if timeout is not httpx.USE_CLIENT_DEFAULT:
+    ) -> httpxyz.Response:
+        if timeout is not httpxyz.USE_CLIENT_DEFAULT:
             warnings.warn(
                 "You should not use the 'timeout' argument with the TestClient. "
                 "See https://github.com/Kludex/starlette/issues/1108 for more information.",
@@ -460,16 +460,16 @@ class TestClient(httpx.Client):
 
     def get(  # type: ignore[override]
         self,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
+    ) -> httpxyz.Response:
         return super().get(
             url,
             params=params,
@@ -483,16 +483,16 @@ class TestClient(httpx.Client):
 
     def options(  # type: ignore[override]
         self,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
+    ) -> httpxyz.Response:
         return super().options(
             url,
             params=params,
@@ -506,16 +506,16 @@ class TestClient(httpx.Client):
 
     def head(  # type: ignore[override]
         self,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
+    ) -> httpxyz.Response:
         return super().head(
             url,
             params=params,
@@ -529,20 +529,20 @@ class TestClient(httpx.Client):
 
     def post(  # type: ignore[override]
         self,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        content: httpx._types.RequestContent | None = None,
+        content: httpxyz._types.RequestContent | None = None,
         data: _RequestData | None = None,
-        files: httpx._types.RequestFiles | None = None,
+        files: httpxyz._types.RequestFiles | None = None,
         json: Any = None,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
+    ) -> httpxyz.Response:
         return super().post(
             url,
             content=content,
@@ -560,20 +560,20 @@ class TestClient(httpx.Client):
 
     def put(  # type: ignore[override]
         self,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        content: httpx._types.RequestContent | None = None,
+        content: httpxyz._types.RequestContent | None = None,
         data: _RequestData | None = None,
-        files: httpx._types.RequestFiles | None = None,
+        files: httpxyz._types.RequestFiles | None = None,
         json: Any = None,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
+    ) -> httpxyz.Response:
         return super().put(
             url,
             content=content,
@@ -591,20 +591,20 @@ class TestClient(httpx.Client):
 
     def patch(  # type: ignore[override]
         self,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        content: httpx._types.RequestContent | None = None,
+        content: httpxyz._types.RequestContent | None = None,
         data: _RequestData | None = None,
-        files: httpx._types.RequestFiles | None = None,
+        files: httpxyz._types.RequestFiles | None = None,
         json: Any = None,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
+    ) -> httpxyz.Response:
         return super().patch(
             url,
             content=content,
@@ -622,16 +622,16 @@ class TestClient(httpx.Client):
 
     def delete(  # type: ignore[override]
         self,
-        url: httpx._types.URLTypes,
+        url: httpxyz._types.URLTypes,
         *,
-        params: httpx._types.QueryParamTypes | None = None,
-        headers: httpx._types.HeaderTypes | None = None,
-        cookies: httpx._types.CookieTypes | None = None,
-        auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
-        timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,
+        params: httpxyz._types.QueryParamTypes | None = None,
+        headers: httpxyz._types.HeaderTypes | None = None,
+        cookies: httpxyz._types.CookieTypes | None = None,
+        auth: httpxyz._types.AuthTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        follow_redirects: bool | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
+        timeout: httpxyz._types.TimeoutTypes | httpxyz._client.UseClientDefault = httpxyz._client.USE_CLIENT_DEFAULT,
         extensions: dict[str, Any] | None = None,
-    ) -> httpx.Response:
+    ) -> httpxyz.Response:
         return super().delete(
             url,
             params=params,

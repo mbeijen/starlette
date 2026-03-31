@@ -131,26 +131,26 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import TypedDict
 
-import httpx
+import httpxyz
 
 from starlette.applications import Starlette
 from starlette.requests import Request
 
 
 class State(TypedDict):
-    http_client: httpx.AsyncClient
+    http_client: httpxyz.AsyncClient
 
 
 @asynccontextmanager
 async def lifespan(app: Starlette) -> AsyncIterator[State]:
-    async with httpx.AsyncClient() as client:
+    async with httpxyz.AsyncClient() as client:
         yield {"http_client": client}
 
 
 async def homepage(request: Request[State]):
     client = request.state["http_client"]
     # If you run the below line with mypy or pyright, it will reveal the correct type.
-    reveal_type(client)  # Revealed type is 'httpx.AsyncClient'
+    reveal_type(client)  # Revealed type is 'httpxyz.AsyncClient'
 ```
 
 See [Accessing State](lifespan.md#accessing-state) for more details.
@@ -346,7 +346,7 @@ You can view the full security advisory: [GHSA-7f5h-v6xp-fcq8](https://github.co
 * Use ETag from headers when parsing If-Range in FileResponse [#2761](https://github.com/Kludex/starlette/pull/2761).
 * Follow directory symlinks in `StaticFiles` when `follow_symlinks=True` [#2711](https://github.com/Kludex/starlette/pull/2711).
 * Bump minimum `python-multipart` version to `0.0.18` [0ba8395](https://github.com/Kludex/starlette/commit/0ba83959e609bbd460966f092287df1bbd564cc6).
-* Bump minimum `httpx` version to `0.27.0` [#2773](https://github.com/Kludex/starlette/pull/2773).
+* Bump minimum `httpxyz` version to `0.27.0` [#2773](https://github.com/Kludex/starlette/pull/2773).
 
 ## 0.41.3 (November 18, 2024)
 
@@ -478,7 +478,7 @@ You can view the full security advisory:
 #### Fixed
 
 * Revert "Turn `scope["client"]` to `None` on `TestClient` (#2377)" [#2525](https://github.com/Kludex/starlette/pull/2525).
-* Remove deprecated `app` argument passed to `httpx.Client` on the `TestClient` [#2526](https://github.com/Kludex/starlette/pull/2526).
+* Remove deprecated `app` argument passed to `httpxyz.Client` on the `TestClient` [#2526](https://github.com/Kludex/starlette/pull/2526).
 
 ## 0.37.1 (February 9, 2024)
 
@@ -635,7 +635,7 @@ You can view the full security advisory:
 
 ### Added
 * Add `env` parameter to `Jinja2Templates`, and deprecate `**env_options` [#2159](https://github.com/Kludex/starlette/pull/2159).
-* Add clear error message when `httpx` is not installed [#2177](https://github.com/Kludex/starlette/pull/2177).
+* Add clear error message when `httpxyz` is not installed [#2177](https://github.com/Kludex/starlette/pull/2177).
 
 ### Fixed
 * Allow "name" argument on `templates url_for()` [#2127](https://github.com/Kludex/starlette/pull/2127).
@@ -729,10 +729,10 @@ https://github.com/Kludex/starlette/security/advisories/GHSA-v5gw-mw7f-84px
 
 ## 0.21.0 (September 26, 2022)
 
-This release replaces the underlying HTTP client used on the `TestClient` (`requests` :arrow_right: `httpx`), and as those clients [differ _a bit_ on their API](https://www.python-httpx.org/compatibility/), your test suite will likely break. To make the migration smoother, you can use the [`bump-testclient`](https://github.com/Kludex/bump-testclient) tool.
+This release replaces the underlying HTTP client used on the `TestClient` (`requests` :arrow_right: `httpxyz`), and as those clients [differ _a bit_ on their API](https://www.python-httpx.org/compatibility/), your test suite will likely break. To make the migration smoother, you can use the [`bump-testclient`](https://github.com/Kludex/bump-testclient) tool.
 
 ### Changed
-* Replace `requests` with `httpx` in `TestClient` [#1376](https://github.com/Kludex/starlette/pull/1376).
+* Replace `requests` with `httpxyz` in `TestClient` [#1376](https://github.com/Kludex/starlette/pull/1376).
 
 ### Added
 * Add `WebSocketException` and support for WebSocket exception handlers [#1263](https://github.com/Kludex/starlette/pull/1263).

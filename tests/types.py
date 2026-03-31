@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Protocol
 
-import httpx
+import httpxyz
 
 from starlette.testclient import TestClient
 from starlette.types import ASGIApp
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
             base_url: str = "http://testserver",
             raise_server_exceptions: bool = True,
             root_path: str = "",
-            cookies: httpx._types.CookieTypes | None = None,
+            cookies: httpxyz._types.CookieTypes | None = None,
             headers: dict[str, str] | None = None,
             follow_redirects: bool = True,
             client: tuple[str, int] = ("testclient", 50000),
